@@ -43,7 +43,7 @@ function PeopleEdit() {
 
   return (
     <div className="edit-container">
-      <h2>Editar Pessoa</h2>
+      <h2 className="title">Editar Pessoa</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Nome:

@@ -37,8 +37,9 @@ h1 {
   }
   
   form {
-    margin-top: 10px; 
-    margin-bottom: 20px; 
+    margin: 0 auto; /* Isso centraliza horizontalmente o formulário */
+    width: 90%;
+    text-align: left; /* Mantém o alinhamento do texto à esquerda dentro do formulário */
   }
   
   label {
