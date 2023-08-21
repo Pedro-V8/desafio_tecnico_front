@@ -36,9 +36,9 @@ h1 {
     font-size: 14px;
   }
   
-  /* Estilos para o formulário */
   form {
-    margin-top: 30px;
+    margin-top: 10px; 
+    margin-bottom: 20px; 
   }
   
   label {

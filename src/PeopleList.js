@@ -3,7 +3,8 @@ import './PeopleList.css';
 
 import AddPersonForm from './AddPersonForm';
 
-import PeopleDetail from './PeopleDetail';
+import { parse, format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +19,7 @@ function PeopleList() {
     try {
       const response = await fetch('http://127.0.0.1:5001/list_pessoas'); // Substitua pela URL da sua API
       const data = await response.json();
+      console.log(data)
       setPeople(data);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
@@ -84,7 +86,7 @@ function PeopleList() {
           {people.map(person => (
             <tr key={person.id}>
               <td>{person.nome.split(' ')[0]}</td>
-              <td>{person.data_admissao}</td>
+              <td>{format(parse(person.data_admissao, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date()), "dd/MM/yyyy", { locale: ptBR })}</td>
               <td>
                 <button onClick={() => handleNavigateToDetails(person)}>Ver Mais</button>
                 <button onClick={() => handleNavigateToEdit(person)}>Editar</button>

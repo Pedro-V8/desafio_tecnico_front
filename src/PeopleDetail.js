@@ -1,6 +1,9 @@
 import React from 'react';
-import { useLocation , useNavigate } from 'react-router-dom'; // Importe o useLocation
-import './PeopleDetail.css'; // Importe o arquivo CSS
+import { useLocation , useNavigate } from 'react-router-dom'; 
+import './PeopleDetail.css';
+
+import { parse, format } from 'date-fns';
+import ptBR from 'date-fns/locale/pt-BR';
 
 function PeopleDetail() {
   const location = useLocation();
@@ -40,8 +43,8 @@ function PeopleDetail() {
       <p><strong>Nome:</strong> {person.nome}</p>
       <p><strong>RG:</strong> {person.rg}</p>
       <p><strong>CPF:</strong> {person.cpf}</p>
-      <p><strong>Data de Nascimento:</strong> {person.data_nascimento}</p>
-      <p><strong>Data de Admissão:</strong> {person.data_admissao}</p>
+      <p><strong>Data de Nascimento:</strong> {format(parse(person.data_nascimento, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date()), "dd/MM/yyyy", { locale: ptBR })}</p>
+      <p><strong>Data de Admissão:</strong> {format(parse(person.data_admissao, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date()), "dd/MM/yyyy", { locale: ptBR })}</p>
 
       <div className="action-buttons">
         <button className="edit-button" onClick={() => handleNavigateToEdit(person)}>Editar</button>
