@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './PeopleList.css';
 
-import AddPersonForm from '../Create/AddPersonForm';
-
 import { parse, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
@@ -12,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 function PeopleList() {
   const [people, setPeople] = useState([]);
   const [peopleDetail, setPeopleDetail] = useState(null);
+  const [loading, setLoading] = useState(true);
   
   const navigate = useNavigate();
   // Função para carregar os dados da API de backend
@@ -19,8 +18,9 @@ function PeopleList() {
     try {
       const response = await fetch('http://127.0.0.1:5001/list_pessoas'); // Substitua pela URL da sua API
       const data = await response.json();
-      console.log(data)
+      
       setPeople(data);
+      setLoading(false);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
@@ -94,32 +94,38 @@ function PeopleList() {
   return (
     <div>
       <h1 className="title">Lista de Pessoas</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Nome</th>
-            <th>Data de Admissão</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {people.map(person => (
-            <tr key={person.id}>
-              <td>{person.nome.split(' ')[0]}</td>
-              <td>{format(parse(person.data_admissao, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date()), "dd/MM/yyyy", { locale: ptBR })}</td>
-              <td>
-                <button onClick={() => handleNavigateToDetails(person)}>Ver Mais</button>
-                <button onClick={() => handleNavigateToEdit(person)}>Editar</button>
-                <button onClick={() => handleDelete(person.id_pessoa)}>Excluir</button>
-              </td>
+      
+      {loading ? (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+          <img src="https://media.giphy.com/media/swhRkVYLJDrCE/giphy.gif" alt="GIF de carregamento" width="480" height="270" />
+        </div>
+
+      ) : (
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Data de Admissão</th>
+              <th>Ações</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {people.map(person => (
+              <tr key={person.id}>
+                <td>{person.nome.split(' ')[0]}</td>
+                <td>{format(parse(person.data_admissao, "EEE, dd MMM yyyy HH:mm:ss 'GMT'", new Date()), "dd/MM/yyyy", { locale: ptBR })}</td>
+                <td>
+                  <button onClick={() => handleNavigateToDetails(person)}>Ver Mais</button>
+                  <button onClick={() => handleNavigateToEdit(person)}>Editar</button>
+                  <button onClick={() => handleDelete(person.id_pessoa)}>Excluir</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       
       <button className="formButton" onClick={() => handleNavigateToCreate()}>Cadastrar Pessoa</button>
-      
-
     </div>
   );
 }
