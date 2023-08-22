@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios';
 
 
 function AddPersonForm({ updatePeopleList }) {
@@ -24,17 +26,18 @@ function AddPersonForm({ updatePeopleList }) {
     event.preventDefault();
 
     try {
-      const response = await fetch('http://127.0.0.1:5001/create_pessoa', {
-        method: 'POST',
+      const response = await axios.post('http://127.0.0.1:5001/create_pessoa', newPerson, {
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newPerson)
+        }
       });
 
-      if (response.ok) {
-        // Sucesso! Faça algo após o envio dos dados
-        console.log('Dados enviados com sucesso!');
+
+      if (response.data.error) { 
+
+        alert(response.data.error);
+      } else {
+
         setNewPerson({
           nome: '',
           rg: '',
@@ -44,9 +47,8 @@ function AddPersonForm({ updatePeopleList }) {
           funcao: ''
         });
 
-        updatePeopleList();
-      } else {
-        console.error('Erro ao enviar dados para a API');
+        alert('Dados enviados com sucesso!');
+        navigate('/');
       }
     } catch (error) {
       console.error('Erro ao enviar dados:', error);

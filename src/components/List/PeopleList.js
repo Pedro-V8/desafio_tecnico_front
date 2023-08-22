@@ -38,7 +38,7 @@ function PeopleList() {
 
       if (response.ok) {
         alert('Registro excluído com sucesso! Atualizando...');
-        // Atualize a lista após a exclusão bem-sucedida
+        
         updatePeopleList();
       } else {
         console.error('Erro ao excluir registro');
@@ -61,9 +61,6 @@ function PeopleList() {
     navigate('/create_pessoa');
   }
 
-
-
-
   useEffect(() => {
     fetchPeopleData();
   }, []);
@@ -85,8 +82,8 @@ function PeopleList() {
     };
 
     const cachedData = localStorage.getItem('peopleData');
-    
-    if (cachedData.length === 0) {
+    console.log(cachedData);
+    if (cachedData === null) {
         fetchAndCacheData();
     } else {
         
