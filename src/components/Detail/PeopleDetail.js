@@ -19,8 +19,8 @@ function PeopleDetail() {
 
       if (response.ok) {
         alert('Registro excluído com sucesso!');
-        // Atualize a lista após a exclusão bem-sucedida
-        navigate('/'); // Redirecione para a página de listagem
+        
+        navigate('/'); 
       } else {
         console.error('Erro ao excluir registro');
       }

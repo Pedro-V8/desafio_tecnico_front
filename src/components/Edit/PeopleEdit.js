@@ -1,64 +1,56 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-function AddPersonForm({ updatePeopleList }) {
-  const [newPerson, setNewPerson] = useState({
-    nome: '',
-    rg: '',
-    cpf: '',
-    data_nascimento: '',
-    data_admissao: '',
-    funcao: ''
-  });
+
+function PeopleEdit() {
+  const location = useLocation();
+  const person = location.state.person;
+  const navigate = useNavigate();
+  const [editedPerson, setEditedPerson] = useState({ ...person });
+
+  const handleCancel = () => {
+    navigate('/');
+  };
 
   const handleInputChange = event => {
     const { name, value } = event.target;
-    setNewPerson(prevPerson => ({ ...prevPerson, [name]: value }));
+    setEditedPerson(prevPerson => ({ ...prevPerson, [name]: value }));
   };
 
   const handleSubmit = async event => {
     event.preventDefault();
-
+    
     try {
-      const response = await fetch('http://127.0.0.1:5001/create_pessoa', {
-        method: 'POST',
+      const response = await fetch(`http://127.0.0.1:5001/update_pessoa/${editedPerson.id_pessoa}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(newPerson)
+        body: JSON.stringify(editedPerson)
       });
-
+  
       if (response.ok) {
-        // Sucesso! Faça algo após o envio dos dados
-        console.log('Dados enviados com sucesso!');
-        setNewPerson({
-          nome: '',
-          rg: '',
-          cpf: '',
-          data_nascimento: '',
-          data_admissao: '',
-          funcao: ''
-        });
-
-        updatePeopleList();
+        console.log('Dados atualizados com sucesso!');
+        
+        navigate('/');
       } else {
-        console.error('Erro ao enviar dados para a API');
+        console.error('Erro ao atualizar dados');
       }
     } catch (error) {
-      console.error('Erro ao enviar dados:', error);
+      console.error('Erro ao atualizar dados:', error);
     }
   };
 
-
   return (
-    <div>
-      <h2 className="title">Adicionar Nova Pessoa</h2>
+    <div className="edit-container">
+      <h2 className="title">Editar Pessoa</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Nome:
           <input
             type="text"
             name="nome"
-            value={newPerson.nome}
+            value={editedPerson.nome}
             onChange={handleInputChange}
             required
           />
@@ -68,7 +60,7 @@ function AddPersonForm({ updatePeopleList }) {
           <input
             type="text"
             name="rg"
-            value={newPerson.rg}
+            value={editedPerson.rg}
             onChange={handleInputChange}
             required
           />
@@ -78,7 +70,7 @@ function AddPersonForm({ updatePeopleList }) {
           <input
             type="text"
             name="cpf"
-            value={newPerson.cpf}
+            value={editedPerson.cpf}
             onChange={handleInputChange}
             required
           />
@@ -88,7 +80,7 @@ function AddPersonForm({ updatePeopleList }) {
           <input
             type="date"
             name="data_nascimento"
-            value={newPerson.data_nascimento}
+            value={editedPerson.data_nascimento}
             onChange={handleInputChange}
             required
           />
@@ -98,7 +90,7 @@ function AddPersonForm({ updatePeopleList }) {
           <input
             type="date"
             name="data_admissao"
-            value={newPerson.data_admissao}
+            value={editedPerson.data_admissao}
             onChange={handleInputChange}
             required
           />
@@ -108,15 +100,18 @@ function AddPersonForm({ updatePeopleList }) {
           <input
             type="text"
             name="funcao"
-            value={newPerson.funcao}
+            value={editedPerson.funcao}
             onChange={handleInputChange}
             required
           />
         </label>
-        <button type="submit">Adicionar</button>
+        <div className="button-container">
+          <button type="submit">Salvar</button>
+          <button type="button" onClick={handleCancel}>Cancelar</button>
+        </div>
       </form>
     </div>
   );
 }
 
-export default AddPersonForm;
+export default PeopleEdit;

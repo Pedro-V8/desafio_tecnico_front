@@ -1,56 +1,73 @@
 import React, { useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+
+import { useNavigate } from 'react-router-dom'; 
 
 
-function PeopleEdit() {
-  const location = useLocation();
-  const person = location.state.person;
+function AddPersonForm({ updatePeopleList }) {
+  const [newPerson, setNewPerson] = useState({
+    nome: '',
+    rg: '',
+    cpf: '',
+    data_nascimento: '',
+    data_admissao: '',
+    funcao: ''
+  });
+
   const navigate = useNavigate();
-  const [editedPerson, setEditedPerson] = useState({ ...person });
+
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setNewPerson(prevPerson => ({ ...prevPerson, [name]: value }));
+  };
+
+  const handleSubmit = async event => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch('http://127.0.0.1:5001/create_pessoa', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newPerson)
+      });
+
+      if (response.ok) {
+        // Sucesso! Faça algo após o envio dos dados
+        console.log('Dados enviados com sucesso!');
+        setNewPerson({
+          nome: '',
+          rg: '',
+          cpf: '',
+          data_nascimento: '',
+          data_admissao: '',
+          funcao: ''
+        });
+
+        updatePeopleList();
+      } else {
+        console.error('Erro ao enviar dados para a API');
+      }
+    } catch (error) {
+      console.error('Erro ao enviar dados:', error);
+    }
+  };
 
   const handleCancel = () => {
     navigate('/');
   };
 
-  const handleInputChange = event => {
-    const { name, value } = event.target;
-    setEditedPerson(prevPerson => ({ ...prevPerson, [name]: value }));
-  };
-
-  const handleSubmit = async event => {
-    event.preventDefault();
-    
-    try {
-      const response = await fetch(`http://127.0.0.1:5001/update_pessoa/${editedPerson.id_pessoa}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(editedPerson)
-      });
-  
-      if (response.ok) {
-        console.log('Dados atualizados com sucesso!');
-        // Limpe o formulário após o envio bem-sucedido
-        navigate('/');
-      } else {
-        console.error('Erro ao atualizar dados');
-      }
-    } catch (error) {
-      console.error('Erro ao atualizar dados:', error);
-    }
-  };
 
   return (
-    <div className="edit-container">
-      <h2 className="title">Editar Pessoa</h2>
+    <div>
+      <h2 className="title">Adicionar Nova Pessoa</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Nome:
           <input
             type="text"
             name="nome"
-            value={editedPerson.nome}
+            value={newPerson.nome}
             onChange={handleInputChange}
             required
           />
@@ -60,7 +77,7 @@ function PeopleEdit() {
           <input
             type="text"
             name="rg"
-            value={editedPerson.rg}
+            value={newPerson.rg}
             onChange={handleInputChange}
             required
           />
@@ -70,7 +87,7 @@ function PeopleEdit() {
           <input
             type="text"
             name="cpf"
-            value={editedPerson.cpf}
+            value={newPerson.cpf}
             onChange={handleInputChange}
             required
           />
@@ -80,7 +97,7 @@ function PeopleEdit() {
           <input
             type="date"
             name="data_nascimento"
-            value={editedPerson.data_nascimento}
+            value={newPerson.data_nascimento}
             onChange={handleInputChange}
             required
           />
@@ -90,7 +107,7 @@ function PeopleEdit() {
           <input
             type="date"
             name="data_admissao"
-            value={editedPerson.data_admissao}
+            value={newPerson.data_admissao}
             onChange={handleInputChange}
             required
           />
@@ -100,18 +117,16 @@ function PeopleEdit() {
           <input
             type="text"
             name="funcao"
-            value={editedPerson.funcao}
+            value={newPerson.funcao}
             onChange={handleInputChange}
             required
           />
         </label>
-        <div className="button-container">
-          <button type="submit">Salvar</button>
-          <button type="button" onClick={handleCancel}>Cancelar</button>
-        </div>
+        <button type="submit">Adicionar</button>
+        <button type="button" onClick={handleCancel}>Cancelar</button>
       </form>
     </div>
   );
 }
 
-export default PeopleEdit;
+export default AddPersonForm;

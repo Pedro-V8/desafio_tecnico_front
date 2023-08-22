@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Importe também o componente `Routes`
-import PeopleList from './PeopleList';
-import PeopleDetail from './PeopleDetail'; 
-import PeopleEdit from './PeopleEdit'; 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import PeopleList from './components/List/PeopleList';
+import PeopleDetail from './components/Detail/PeopleDetail'; 
+import PeopleEdit from './components/Edit/PeopleEdit'; 
+import AddPersonForm from './components/Create/AddPersonForm';
 
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<PeopleList />} />
+        <Route path="/create_pessoa" element={<AddPersonForm />} />
         <Route path="/people/:id" element={<PeopleDetail />} />
         <Route path="/people/edit/:id" element={<PeopleEdit />} />
         

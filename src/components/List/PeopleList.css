@@ -37,9 +37,9 @@ h1 {
   }
   
   form {
-    margin: 0 auto; /* Isso centraliza horizontalmente o formulário */
+    margin: 0 auto; 
     width: 90%;
-    text-align: left; /* Mantém o alinhamento do texto à esquerda dentro do formulário */
+    text-align: left;
   }
   
   label {
@@ -63,5 +63,16 @@ h1 {
   .title {
     text-align: center;
     margin-bottom: 20px;
+  }
+
+  .formButton {
+    display: block;
+    margin: 0 auto;
+    width: 200px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    cursor: pointer;
   }
   

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PeopleList.css';
 
-import AddPersonForm from './AddPersonForm';
+import AddPersonForm from '../Create/AddPersonForm';
 
 import { parse, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -56,6 +56,10 @@ function PeopleList() {
   const handleNavigateToEdit = person => {
     navigate(`/people/edit/${person.id_pessoa}`, { state: { person } });
   };
+
+  const handleNavigateToCreate = () => {
+    navigate('/create_pessoa');
+  }
 
 
 
@@ -115,8 +119,9 @@ function PeopleList() {
           ))}
         </tbody>
       </table>
-
-      <AddPersonForm updatePeopleList={updatePeopleList} />
+      
+      <button className="formButton" onClick={() => handleNavigateToCreate()}>Cadastrar Pessoa</button>
+      
 
     </div>
   );
