@@ -5,6 +5,8 @@ import './PeopleDetail.css';
 import { parse, format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 
+import axios from 'axios';
+
 function PeopleDetail() {
   const location = useLocation();
   const person = location.state.person;
@@ -13,19 +15,15 @@ function PeopleDetail() {
 
   const handleDelete = async personId => {
     try {
-      const response = await fetch(`http://127.0.0.1:5001/delete_pessoa/${personId}`, {
-        method: 'DELETE'
-      });
-
-      if (response.ok) {
+      const response = await axios.delete(`http://127.0.0.1:5001/delete_pessoa/${personId}`);
+  
+      if (response.status === 200) {
         alert('Registro excluído com sucesso!');
         
-        navigate('/'); 
-      } else {
-        console.error('Erro ao excluir registro');
+        updatePeopleList();
       }
     } catch (error) {
-      console.error('Erro ao excluir registro:', error);
+      alert('Erro ao excluir registro:', error);
     }
   };
 

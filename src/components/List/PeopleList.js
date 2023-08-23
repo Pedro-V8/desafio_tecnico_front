@@ -6,18 +6,20 @@ import ptBR from 'date-fns/locale/pt-BR';
 
 import { useNavigate } from 'react-router-dom';
 
+import axios from 'axios';
+
 
 function PeopleList() {
   const [people, setPeople] = useState([]);
-  const [peopleDetail, setPeopleDetail] = useState(null);
   const [loading, setLoading] = useState(true);
   
   const navigate = useNavigate();
+
   // Função para carregar os dados da API de backend
   const fetchPeopleData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5001/list_pessoas'); // Substitua pela URL da sua API
-      const data = await response.json();
+      const response = await axios.get('http://127.0.0.1:5001/list_pessoas');
+      const data = response.data;
       
       setPeople(data);
       setLoading(false);
@@ -25,30 +27,30 @@ function PeopleList() {
       console.error('Erro ao buscar dados:', error);
     }
   };
-
+  // Atualizar Tabela de Listagem
   const updatePeopleList = async () => {
     await fetchPeopleData();
   };
 
+  // Deletar pela Tabela de Listagem
   const handleDelete = async personId => {
     try {
-      const response = await fetch(`http://127.0.0.1:5001/delete_pessoa/${personId}`, {
-        method: 'DELETE'
-      });
-
-      if (response.ok) {
-        alert('Registro excluído com sucesso! Atualizando...');
+      const response = await axios.delete(`http://127.0.0.1:5001/delete_pessoa/${personId}`);
+  
+      if (response.status === 200) {
+        
         
         updatePeopleList();
-      } else {
-        console.error('Erro ao excluir registro');
+
+        alert('Registro excluído com sucesso!');
       }
     } catch (error) {
-      console.error('Erro ao excluir registro:', error);
+      alert('Erro ao excluir registro:', error);
     }
   };
 
 
+  // Funções responsáveis pela navegação
   const handleNavigateToDetails = person => {
     navigate(`/people/${person.id_pessoa}`, { state: { person } });
   };
@@ -65,31 +67,6 @@ function PeopleList() {
     fetchPeopleData();
   }, []);
 
-  /*useEffect(() => {
-
-    
-    const fetchAndCacheData = async () => {
-      try {
-        
-        const response = await fetch('http://127.0.0.1:5001/list_pessoas');
-        const data = await response.json();
-        
-        setPeople(data);
-        localStorage.setItem('peopleData', JSON.stringify(data));
-      } catch (error) {
-        console.error('Erro ao buscar dados:', error);
-      }
-    };
-
-    const cachedData = localStorage.getItem('peopleData');
-    console.log(cachedData);
-    if (cachedData === null) {
-        fetchAndCacheData();
-    } else {
-        
-        setPeople(JSON.parse(cachedData));
-    }
-  }, []);*/
 
   return (
     <div>

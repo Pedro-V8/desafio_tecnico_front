@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import axios from 'axios';
+
 
 function PeopleEdit() {
   const location = useLocation();
@@ -12,6 +14,7 @@ function PeopleEdit() {
     navigate('/');
   };
 
+  // Capturar os dados do Input
   const handleInputChange = event => {
     const { name, value } = event.target;
     setEditedPerson(prevPerson => ({ ...prevPerson, [name]: value }));
@@ -19,25 +22,21 @@ function PeopleEdit() {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    
+  
     try {
-      const response = await fetch(`http://127.0.0.1:5001/update_pessoa/${editedPerson.id_pessoa}`, {
-        method: 'PUT',
+      const response = await axios.put(`http://127.0.0.1:5001/update_pessoa/${editedPerson.id_pessoa}`, editedPerson, {
         headers: {
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(editedPerson)
+        }
       });
   
-      if (response.ok) {
-        console.log('Dados atualizados com sucesso!');
+      if (response.status === 200) {
+        alert('Dados atualizados com sucesso!');
         
         navigate('/');
-      } else {
-        console.error('Erro ao atualizar dados');
       }
     } catch (error) {
-      console.error('Erro ao atualizar dados:', error);
+      alert('Erro ao atualizar dados:', error);
     }
   };
 

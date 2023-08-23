@@ -26,6 +26,7 @@ function AddPersonForm({ updatePeopleList }) {
     event.preventDefault();
 
     try {
+
       const response = await axios.post('http://127.0.0.1:5001/create_pessoa', newPerson, {
         headers: {
           'Content-Type': 'application/json'
@@ -37,17 +38,8 @@ function AddPersonForm({ updatePeopleList }) {
 
         alert(response.data.error);
       } else {
-
-        setNewPerson({
-          nome: '',
-          rg: '',
-          cpf: '',
-          data_nascimento: '',
-          data_admissao: '',
-          funcao: ''
-        });
-
         alert('Dados enviados com sucesso!');
+
         navigate('/');
       }
     } catch (error) {
