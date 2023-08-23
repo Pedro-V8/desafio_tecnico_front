@@ -20,7 +20,7 @@ function PeopleDetail() {
       if (response.status === 200) {
         alert('Registro excluído com sucesso!');
         
-        updatePeopleList();
+        navigate('/')
       }
     } catch (error) {
       alert('Erro ao excluir registro:', error);
